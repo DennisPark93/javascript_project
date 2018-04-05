@@ -1,22 +1,20 @@
 
 
-# Inventory Checker
+# Checker(Trying to come up with new name)
 
 ## Overview
 
-(___TODO__: a brief one or two paragraph, high-level description of your project_)
 
-Inventory Checker is a web app that will allow store owners to check their inventories in their stores.
+Checker is a web app that will allow store owners to check their inventories in their stores.
 
-Store Owners can check inventory and their profits by using the app
+Store Owners can check inventory and their revenues, cost, profits by using the app
 
 
 
 ## Data Model
 
-(___TODO__: a description of your application's data and their relationships to each other_)
 
-The application will store Users(Store Owners), and items
+The application will store Users(Store Owners), Stores, and items
 
 
 (___TODO__: sample documents_)
@@ -50,6 +48,7 @@ An Example Item
 {
   store: // a reference to a Store object
   item name: "iPhoneX",
+  description: "Apple's iPhone 7",
   retail cost: "799.99",
   wholesale cost: "400.00",
   stock left: "1",
@@ -64,62 +63,62 @@ An Example Item
 
 ## Wireframes
 
-(___TODO__: wireframes for all of the pages on your site; they can be as simple as photos of drawings or you can use a tool like Balsamiq, Omnigraffle, etc._)
 
-/list/create - page for creating a new shopping list
+/login- page to login
 
-![list create](documentation/list-create.png)
+![login](documentation/log-in.png)
 
-/list - page for showing all shopping lists
+/home - a page showing list of stores owner owns and financial information
 
-![list](documentation/list.png)
+![home](documentation/home.png)
 
-/list/slug - page for showing specific shopping list
+/:slug - page for Store Details
 
-![list](documentation/list-slug.png)
+![/slug](documentation/slug.png)
+
+/:slug/manageitems - page to manage manage items
+
+![/manageitems](documentation/manageitems.png)
+
+/user - page to manage user
+
+![/user](documentation/user.png)
 
 ## Site map
 
-(___TODO__: draw out a site map that shows how pages are related to each other_)
-
-Here's a [complex example from wikipedia](https://upload.wikimedia.org/wikipedia/commons/2/20/Sitemap_google.jpg), but you can create one without the screenshots, drop shadows, etc. ... just names of pages and where they flow to.
+![sitemap](documentation/site-map.png)
 
 ## User Stories or Use Cases
 
-(___TODO__: write out how your application will be used through [user stories](http://en.wikipedia.org/wiki/User_story#Format) and / or [use cases](https://www.mongodb.com/download-center?jmp=docs&_ga=1.47552679.1838903181.1489282706#previous)_)
-
 1. as non-registered user, I can register a new account with the site
 2. as a user, I can log in to the site
-3. as a user, I can create a new grocery list
-4. as a user, I can view all of the grocery lists I've created in a single list
-5. as a user, I can add items to an existing grocery list
-6. as a user, I can cross off items in an existing grocery list
+3. as a user, I can create new Store
+4. as a user, I can view current status of my Store(including revenue, cost, profit, location on google maps)
+5. as a user, I can add items to my Store
+6. as a user, I can adjust number of stocks left and number of items sold
 
 ## Research Topics
 
-(___TODO__: the research topics that you're planning on working on along with their point values... and the total points of research topics listed_)
 
 * (5 points) Integrate user authentication
     * I'm going to be using passport for user authentication
-    * And account has been made for testing; I'll email you the password
-    * see <code>cs.nyu.edu/~jversoza/ait-final/register</code> for register page
-    * see <code>cs.nyu.edu/~jversoza/ait-final/login</code> for login page
-* (4 points) Perform client side form validation using a JavaScript library
-    * see <code>cs.nyu.edu/~jversoza/ait-final/my-form</code>
-    * if you put in a number that's greater than 5, an error message will appear in the dom
-* (5 points) vue.js
-    * used vue.js as the frontend framework; it's a challenging library to learn, so I've assigned it 5 points
+    * Can register by filling in the fields (must be unused username)
+* (3 points?) Google Maps
+    * Use it to Locate User's Store on a Map
+    * First time implementing it, but always wanted to since most websites and apps have google maps this days
+* (2 points) CSS Framework - Bootstrap
+    * It Allows better environment to create and maintain
+    * One CSS allows Desktop, Phones, and tablets
 
-10 points total out of 8 required points (___TODO__: addtional points will __not__ count for extra credit_)
+10 points total out of 8 required points
 
 
 ## [Link to Initial Main Project File](app.js)
 
-(___TODO__: create a skeleton Express application with a package.json, app.js, views folder, etc. ... and link to your initial app.js_)
 
 ## Annotations / References Used
 
-(___TODO__: list any tutorials/references/etc. that you've based your code off of_)
 
-1. [passport.js authentication docs](http://passportjs.org/docs) - (add link to source code that was based on this)
-2. [tutorial on vue.js](https://vuejs.org/v2/guide/) - (add link to source code that was based on this)
+1. [passport.js authentication docs](http://passportjs.org/docs)
+2. [Google Maps Javascript API Tutorial](https://developers.google.com/maps/documentation/javascript/)
+3. [tutorial on Bootstrap](https://getbootstrap.com/docs/3.3/css/)

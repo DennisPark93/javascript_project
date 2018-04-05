@@ -34,6 +34,7 @@ const Store = new mongoose.Schema({
 const Item = new mongoose.Schema({
   store: {type: mongoose.Schema.Types.ObjectId, ref:'Store'},
   itemname: {type: String, required: true},
+  description: {type: String, required: true},
   retail_cost: {type: Number, required: true},
   wholesale_cost: {type: Number, required: true},
   stock_left: {type: Number, required: true},

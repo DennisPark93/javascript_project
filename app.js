@@ -171,4 +171,4 @@ passport.use(new LocalStrategy(//still implementing
   }
 ));
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000);

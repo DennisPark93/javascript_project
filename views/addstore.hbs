@@ -1,0 +1,25 @@
+<h2>Add new Store</h2>
+<hr>
+{{#if message}}
+<div class="error">{{ message }}</div>
+{{/if}}
+<form method="POST" action="">
+	<div>
+		<label for="storename">Store Name:</label>
+		<input type="text" id="storename" name="storename" value="">
+	</div>
+	<div>
+		<label for="store_address">Address:</label>
+		<input type="store_address" id="store_address" name="store_address" value="">
+	</div>
+	<div>
+		<label for="store_state">State:</label>
+		<input type="store_state" id="store_state" name="store_state" value="">
+	</div>
+	<div>
+		<label for="store_zipcode">Zipcode:</label>
+		<input type="store_zipcode" id="store_zipcode" name="store_zipcode" value="">
+	</div>
+	<input type="submit" value="Add">
+</form>
+<hr>

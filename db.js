@@ -14,11 +14,11 @@ const User = new mongoose.Schema({
 // initial store cost, profit, revenue will be set to zero.
 // it will be updated as we update items to the store
 const Store = new mongoose.Schema({
-  user: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   storename: {type: String, required: true},
-  store address: {type: String, required: true},
-  store state: {type: String, required: true},
-  store zipcode: {type: Number, required: true},
+  store_address: {type: String, required: true},
+  store_state: {type: String, required: true},
+  store_zipcode: {type: Number, required: true},
   revenue: {type: Number, default: 0},
   cost: {type: Number, default: 0},
   profit: {type: Number, default: 0},
@@ -45,7 +45,7 @@ const Item = new mongoose.Schema({
 });
 
 
-
+User.plugin(URLSlugs('username'))
 Store.plugin(URLSlugs('storename'));
 
 // register your model

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<h2><b>Detail of a Store</b></h3>
+<hr>
+<h3><b>{{store.storename}}</b></h4>
+<br>
+<br>
+<h5>
+Address: {{store.store_address}}, {{store.store_state}}, {{store.store_zipcode}}
+<br>
+Revenue: ${{store.revenue}}
+Cost: ${{store.cost}}
+Profit: ${{store.profit}}
+</h5>
+
+
+
+
+<form method="POST" action="" class="manage">
+	<div>
+		<label for="store_address">Address:</label>
+		<input type="store_address" id="store_address" name="store_address" value="">
+	</div>
+	<div>
+		<label for="store_state">State:</label>
+		<input type="store_state" id="store_state" name="store_state" value="">
+	</div>
+	<div>
+		<label for="store_zipcode">Zipcode:</label>
+		<input type="store_zipcode" id="store_zipcode" name="store_zipcode" value="">
+	</div>
+	<input type="submit" name="update" value="Update"> <input type="submit" name="remove" value="Remove Store from List">
+</form>
+<hr>
+
+</html>

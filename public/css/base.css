@@ -1,11 +1,22 @@
-ul {
+nav < ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
   text-align: center;
 }
 
-ul li{
+.store{
+  display: inline;
+  list-style-type: none;
+  margin: 0;
+  padding: 0px;
+  text-align: center;
+  float: left;
+  width: 50%;
+  text-align: center;
+}
+
+nav ul li{
   display: inline;
   padding: 10px;
   text-align: center;
@@ -17,8 +28,9 @@ h2, h3{
 
 form{
 	text-align:left;
-	padding-left: 650px;
+	padding-left: 700px;
 }
+
 article-detail{
   text-align:left;
 	padding-left: 650px;

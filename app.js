@@ -34,7 +34,7 @@ app.use(function (req, res, next) {
 
 app.get('/', (req, res) => {
   if(req.session.user === null || req.session.user === undefined){
-    res.redirect('login');
+    res.redirect('/login');
   }
   else{
     Store.find({user: req.session.user._id}, function(err,store){
@@ -95,7 +95,7 @@ app.get('/addstore', (req, res) => {
     res.redirect('/login');
   }
   else{
-    res.render('addstore');
+    res.render('/addstore');
   }
 });
 

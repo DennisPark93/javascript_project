@@ -67,6 +67,11 @@ app.post('/login', (req, res) => {
     });
 });
 
+app.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.locals.user = null;
+  res.redirect('/login');
+});
 
 app.get('/register', (req, res) => {
   res.render('register');
@@ -123,7 +128,7 @@ app.post('/addstore', (req, res) => {
 app.get('/:slug', (req, res) => {
   if(res.locals.user){
     Store.findOne({slug: req.params.slug}, function(err,store){
-      if(req.session.user._id == store.user){
+      if(res.session.user._id == store.user){
         res.render('store', {store: store});
       }
       else{
@@ -154,6 +159,8 @@ app.post('/:slug', (req, res) => {
     res.redirect('/');
   }
 });
+
+
 
 
 passport.use(new LocalStrategy(//still implementing

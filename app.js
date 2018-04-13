@@ -91,19 +91,19 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/addstore', (req, res) => {
-  if(req.session.user=== null || req.session.user === undefined){
-    res.redirect('/login');
-  }
-  else{
-    res.render('/addstore');
-  }
+  // if(req.session.user === null || req.session.user === undefined){
+  //   res.redirect('/login');
+  // }
+  // else{
+    res.render('addstore');
+  // }
 });
 
 app.post('/addstore', (req, res) => {
-  if(req.session.user=== null || req.session.user === undefined){
-    res.redirect('/login');
-  }
-  else{
+  // if(req.session.user=== null || req.session.user === undefined){
+  //   res.redirect('/login');
+  // }
+  // else{
     const newStore = new Store({
       user:req.session.user._id,
       storename: req.body.storename,
@@ -121,18 +121,18 @@ app.post('/addstore', (req, res) => {
         res.redirect('/');
       }
     });
-  }
+  // }
 });
 
 app.get('/:slug', (req, res) => {
   if(res.locals.user){
     Store.findOne({slug: req.params.slug}, function(err,store){
-      if(res.session.user._id == store.user){
+      // if(res.session.user._id == store.user){
         res.render('store', {store: store});
-      }
-      else{
-         res.redirect('/');
-      }
+      // }
+      // else{
+      //    res.redirect('/');
+      // }
     });
   }
   else{

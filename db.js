@@ -45,7 +45,7 @@ const Item = new mongoose.Schema({
 });
 
 
-User.plugin(URLSlugs('username'))
+// User.plugin(URLSlugs('username'))
 Store.plugin(URLSlugs('storename'));
 
 // register your model

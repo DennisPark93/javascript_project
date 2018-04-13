@@ -24,8 +24,8 @@ app.use(session({
     saveUninitialized: true,
 }));
 
-app.use(passport.initialize())//still implementing
-app.use(passport.session())//still implementing
+// app.use(passport.initialize())//still implementing
+// app.use(passport.session())//still implementing
 
 app.use(function (req, res, next) {
   res.locals.user = req.session.user || null;
@@ -69,7 +69,6 @@ app.post('/login', (req, res) => {
 
 app.get('/logout', (req, res) => {
   req.session.destroy();
-  res.locals.user = null;
   res.redirect('/login');
 });
 
@@ -163,19 +162,19 @@ app.post('/:slug', (req, res) => {
 
 
 
-passport.use(new LocalStrategy(//still implementing
-  function(username, password, done) {
-    User.findOne({ username: username }, function(err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
-    });
-  }
-));
+// passport.use(new LocalStrategy(//still implementing
+//   function(username, password, done) {
+//     User.findOne({ username: username }, function(err, user) {
+//       if (err) { return done(err); }
+//       if (!user) {
+//         return done(null, false, { message: 'Incorrect username.' });
+//       }
+//       if (!user.validPassword(password)) {
+//         return done(null, false, { message: 'Incorrect password.' });
+//       }
+//       return done(null, user);
+//     });
+//   }
+// ));
 
 app.listen(process.env.PORT || 3000);

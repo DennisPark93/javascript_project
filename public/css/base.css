@@ -5,6 +5,10 @@ nav < ul {
   text-align: center;
 }
 
+.additem{
+  position: absolute;
+  left: -600px;
+}
 .store{
   display: inline;
   list-style-type: none;

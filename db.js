@@ -33,7 +33,7 @@ const Store = new mongoose.Schema({
 // * will keep track of left stocks and items sold
 const Item = new mongoose.Schema({
   store: {type: mongoose.Schema.Types.ObjectId, ref:'Store'},
-  itemname: {type: String, required: true},
+  itemname: {type: String, unique: true, required: true},
   description: {type: String, required: true},
   retail_cost: {type: Number, required: true},
   wholesale_cost: {type: Number, required: true},

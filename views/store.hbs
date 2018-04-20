@@ -11,7 +11,59 @@ Revenue: ${{store.revenue}}
 Cost: ${{store.cost}}
 Profit: ${{store.profit}}
 </h5>
+<table>
+	<thead>
+		<th>Item Name</th>
+		<th>Description</th>
+		<th>Retail Cost</th>
+    <th>Wholesale Cost</th>
+    <th>Stock Left</th>
+    <th>Number Sold</th>
+	</thead>
+	<tbody>
+		{{#if item}}
+			{{#each item}}
+			<tr>
+			<td>{{this.itemname}}</td>
+			<td>{{this.description}}</td>
+			<td>{{this.retail_cost}}</td>
+      <td>{{this.wholesale_cost}}</td>
+      <td>{{this.stock_left}}</td>
+      <td>{{this.num_sold}}</td>
+			</tr>
+			{{/each}}
+		{{/if}}
+	</tbody>
+</table>
 
+<form method="POST" action="" class="additem">
+	<div>
+		<label for="itemname">Item Name:</label>
+		<input type="itemname" id="itemname" name="itemname" value="">
+	</div>
+	<div>
+		<label for="description">Description:</label>
+		<input type="description" id="description" name="description" value="">
+	</div>
+	<div>
+		<label for="retail_cost">Retail cost:</label>
+		<input type="retail_cost" id="retail_cost" name="retail_cost" value="">
+	</div>
+	<div>
+		<label for="wholesale_cost">Wholesale Cost:</label>
+		<input type="wholesale_cost" id="wholesale_cost" name="wholesale_cost" value="">
+	</div>
+	<div>
+		<label for="stock_left">Stock Leftt:</label>
+		<input type="stock_left" id="stock_left" name="stock_left" value="">
+	</div>
+	<div>
+		<label for="num_sold">Number Sold:</label>
+		<input type="num_sold" id="num_sold" name="num_sold" value="">
+	</div>
+	<input type="submit" name="additem" value="Add Item"> <input type="submit" name="updateitem" value="Update Item">
+	You must type same item name to update its information.
+</form>
 
 
 

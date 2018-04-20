@@ -124,11 +124,19 @@ app.post('/addstore', (req, res) => {
   // }
 });
 
-app.get('/:slug', (req, res) => {
+app.get('/store/:slug', (req, res) => {
   if(res.locals.user){
     Store.findOne({slug: req.params.slug}, function(err,store){
+      Item.find({store: store._id}, function(err,items){
+        if(!items){
+          res.render('store', {store: store});
+        }
+        else{
+          res.render('store', {store: store, item: items});
+        }
       // if(res.session.user._id == store.user){
-        res.render('store', {store: store});
+
+      });
       // }
       // else{
       //    res.redirect('/');
@@ -140,9 +148,41 @@ app.get('/:slug', (req, res) => {
   }
 });
 
-app.post('/:slug', (req, res) => {
+app.post('/store/:slug', (req, res) => {
   if(res.locals.user){
-    if(req.body.remove){
+    if(req.body.additem){
+      Store.findOne({slug: req.params.slug}, function(err,store){
+        const newItem = new Item({
+          store: store._id,
+          itemname: req.body.itemname,
+          description: req.body.description,
+          retail_cost: req.body.retail_cost,
+          wholesale_cost: req.body.wholesale_cost,
+          stock_left: req.body.stock_left,
+          num_sold: req.body.num_sold
+        });
+        newItem.save(function(err){
+          if(err){
+            const errmessage = "DOCUMENT SAVE ERROR";
+            console.log(errmessage);
+            res.render('store', {store: store, message: errmessage});
+          }
+          else{
+            Item.find({store: store._id}, function(err,items){
+              res.render('store', {store: store, item: items});
+            });
+          }
+        });
+      });
+    }
+    else if(req.body.updateitem){
+      Store.findOne({slug: req.params.slug}, function(err,store){
+        Item.findOneAndUpdate({itemname: req.body.itemname}, {$set: {itemname: req.body.itemname, description: req.body.description, retail_cost: req.body.retail_cost, wholesale_cost: req.body.wholesale_cost, stock_left: req.body.stock_left, num_sold: req.body.num_sold}}, {new: true}, function(err,item){
+          res.render('store', {store: store, item:item});
+        });
+      });
+    }
+    else if(req.body.remove){
       Store.remove({slug: req.params.slug}, function(err,store){
         res.redirect('/');
       });

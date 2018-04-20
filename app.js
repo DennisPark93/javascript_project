@@ -131,8 +131,19 @@ app.get('/store/:slug', (req, res) => {
         if(!items){
           res.render('store', {store: store});
         }
-        else{
-          res.render('store', {store: store, item: items});
+        else if(items){
+          let r =[];
+          let c = [];
+          for(let i=0; i<items.length; i++){
+            r.push(items[i].retail_cost*items[i].num_sold);
+            c.push(items[i].wholesale_cost*items[i].num_sold);
+          }
+          const rsum = r.reduce((total, amount) => total + amount);
+          const csum = c.reduce((total, amount) => total + amount);
+          const psum = rsum - csum;
+          Store.findOneAndUpdate({slug: req.params.slug}, {$set: {revenue:rsum, cost:csum, profit:psum}}, {new: true}, function(err,store2){
+          res.render('store', {store: store2, item: items});
+          });
         }
       // if(res.session.user._id == store.user){
 
@@ -169,7 +180,18 @@ app.post('/store/:slug', (req, res) => {
           }
           else{
             Item.find({store: store._id}, function(err,items){
-              res.render('store', {store: store, item: items});
+              let r =[];
+              let c = [];
+              for(let i=0; i<items.length; i++){
+                r.push(items[i].retail_cost*items[i].num_sold);
+                c.push(items[i].wholesale_cost*items[i].num_sold);
+              }
+              const rsum = r.reduce((total, amount) => total + amount);
+              const csum = c.reduce((total, amount) => total + amount);
+              const psum = rsum - csum;
+              Store.findOneAndUpdate({slug: req.params.slug}, {$set: {revenue:rsum, cost:csum, profit:psum}}, {new: true}, function(err,store2){
+                res.render('store', {store: store2, item: items});
+              });
             });
           }
         });
@@ -178,7 +200,18 @@ app.post('/store/:slug', (req, res) => {
     else if(req.body.updateitem){
       Store.findOne({slug: req.params.slug}, function(err,store){
         Item.findOneAndUpdate({itemname: req.body.itemname}, {$set: {itemname: req.body.itemname, description: req.body.description, retail_cost: req.body.retail_cost, wholesale_cost: req.body.wholesale_cost, stock_left: req.body.stock_left, num_sold: req.body.num_sold}}, {new: true}, function(err,item){
-          res.render('store', {store: store, item:item});
+          let r =[];
+          let c = [];
+          for(let i=0; i<items.length; i++){
+            r.push(items[i].retail_cost*items[i].num_sold);
+            c.push(items[i].wholesale_cost*items[i].num_sold);
+          }
+          const rsum = r.reduce((total, amount) => total + amount);
+          const csum = c.reduce((total, amount) => total + amount);
+          const psum = rsum - csum;
+          Store.findOneAndUpdate({slug: req.params.slug}, {$set: {revenue:rsum, cost:csum, profit:psum}}, {new: true}, function(err,store2){
+          res.render('store', {store: store2, item:item});
+          });
         });
       });
     }

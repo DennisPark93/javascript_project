@@ -124,7 +124,7 @@ app.post('/addstore', (req, res) => {
   // }
 });
 
-app.get('/store/:slug', (req, res) => {
+app.get('/:slug', (req, res) => {
   if(res.locals.user){
     Store.findOne({slug: req.params.slug}, function(err,store){
       Item.find({store: store._id}, function(err,items){
@@ -165,7 +165,7 @@ app.get('/store/:slug', (req, res) => {
   }
 });
 
-app.post('/store/:slug', (req, res) => {
+app.post('/:slug', (req, res) => {
   if(res.locals.user){
     if(req.body.additem){
       Store.findOne({slug: req.params.slug}, function(err,store){

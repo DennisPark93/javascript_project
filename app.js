@@ -128,22 +128,28 @@ app.get('/store/:slug', (req, res) => {
   if(res.locals.user){
     Store.findOne({slug: req.params.slug}, function(err,store){
       Item.find({store: store._id}, function(err,items){
-        if(!items){
-          res.render('store', {store: store});
-        }
-        else if(items){
+        if(items){
           let r =[];
           let c = [];
           for(let i=0; i<items.length; i++){
             r.push(items[i].retail_cost*items[i].num_sold);
             c.push(items[i].wholesale_cost*items[i].num_sold);
           }
-          const rsum = r.reduce((total, amount) => total + amount);
-          const csum = c.reduce((total, amount) => total + amount);
+          if(r !== [] && c!==[]){
+          const rsum = r.reduce(function(total, cur){return total + cur;},0);
+          const csum = c.reduce(function(total, cur){return total + cur;},0);
           const psum = rsum - csum;
           Store.findOneAndUpdate({slug: req.params.slug}, {$set: {revenue:rsum, cost:csum, profit:psum}}, {new: true}, function(err,store2){
           res.render('store', {store: store2, item: items});
           });
+          }
+        }
+
+        else if(!items){
+          res.render('store', {store: store});
+        }
+        else{
+          res.redirect('/');
         }
       // if(res.session.user._id == store.user){
 
@@ -206,8 +212,8 @@ app.post('/store/:slug', (req, res) => {
             r.push(items[i].retail_cost*items[i].num_sold);
             c.push(items[i].wholesale_cost*items[i].num_sold);
           }
-          const rsum = r.reduce((total, amount) => total + amount);
-          const csum = c.reduce((total, amount) => total + amount);
+          const rsum = r.reduce(function(total, cur){return total + cur;},0);
+          const csum = c.reduce(function(total, cur){return total + cur;},0);
           const psum = rsum - csum;
           Store.findOneAndUpdate({slug: req.params.slug}, {$set: {revenue:rsum, cost:csum, profit:psum}}, {new: true}, function(err,store2){
           res.render('store', {store: store2, item:item});

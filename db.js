@@ -15,7 +15,7 @@ const User = new mongoose.Schema({
 // it will be updated as we update items to the store
 const Store = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  storename: {type: String, required: true},
+  storename: {type: String, unique: true, required: true},
   store_address: {type: String, required: true},
   store_state: {type: String, required: true},
   store_zipcode: {type: Number, required: true},

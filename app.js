@@ -95,7 +95,7 @@ app.get('/', isAuthenticated, (req, res) => {
             sr.push(ele.revenue);
             sc.push(ele.cost);
             sp.push(ele.profit);
-          }
+          });
 
           const rsum = sr.reduce(function(total, cur){return total + cur;},0);
           const csum = sc.reduce(function(total, cur){return total + cur;},0);
@@ -136,7 +136,7 @@ app.get('/user', isAuthenticated, (req, res) => {
           sr.push(ele.revenue);
           sc.push(ele.cost);
           sp.push(ele.profit);
-        }
+        });
         const rsum = sr.reduce(function(total, cur){return total + cur;},0);
         const csum = sc.reduce(function(total, cur){return total + cur;},0);
         const psum = sp.reduce(function(total, cur){return total + cur;},0);
@@ -183,7 +183,7 @@ app.post('/addstore', isAuthenticated, (req, res) => {
       if(err){
         const errmessage = "DOCUMENT SAVE ERROR";
         console.log(errmessage);
-        res.render('addstore', {message: errmessage});
+        res.render('addstore', {message: req.flash(errmessage)});
       }
       else{
         res.redirect('/');
@@ -202,8 +202,8 @@ app.get('/store/:slug', isAuthenticated, (req, res) => {
           let c = [];
           items.forEach(function(ele){
             r.push(ele.retail_cost*ele.num_sold);
-            c.push(ele.wholeslae_cost*ele.num_sold);
-          }
+            c.push(ele.wholesale_cost*ele.num_sold);
+          });
           if(r !== [] && c!==[]){
           const rsum = r.reduce(function(total, cur){return total + cur;},0);
           const csum = c.reduce(function(total, cur){return total + cur;},0);
@@ -259,8 +259,8 @@ app.post('/store/:slug', isAuthenticated, (req, res) => {
               let c = [];
               items.forEach(function(ele){
                 r.push(ele.retail_cost*ele.num_sold);
-                c.push(ele.wholeslae_cost*ele.num_sold);
-              }
+                c.push(ele.wholesale_cost*ele.num_sold);
+              });
               const rsum = r.reduce((total, amount) => total + amount);
               const csum = c.reduce((total, amount) => total + amount);
               const psum = rsum - csum;
@@ -279,8 +279,8 @@ app.post('/store/:slug', isAuthenticated, (req, res) => {
           let c = [];
           items.forEach(function(ele){
             r.push(ele.retail_cost*ele.num_sold);
-            c.push(ele.wholeslae_cost*ele.num_sold);
-          }
+            c.push(ele.wholesale_cost*ele.num_sold);
+          });
           const rsum = r.reduce(function(total, cur){return total + cur;},0);
           const csum = c.reduce(function(total, cur){return total + cur;},0);
           const psum = rsum - csum;

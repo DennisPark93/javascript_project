@@ -6,7 +6,12 @@ const URLSlugs = require('mongoose-url-slugs');
 // * so users have a username and password
 const User = new mongoose.Schema({
   username: {type: String, required: true},
-  password: {type: String, unique: true, required: true}
+  password: {type: String, unique: true, required: true},
+  revenue: {type: Number, default: 0},
+  cost: {type: Number, default: 0},
+  profit: {type: Number, default: 0}
+}, {
+  _id: true
 });
 
 
@@ -33,7 +38,7 @@ const Store = new mongoose.Schema({
 // * will keep track of left stocks and items sold
 const Item = new mongoose.Schema({
   store: {type: mongoose.Schema.Types.ObjectId, ref:'Store'},
-  itemname: {type: String, unique: true, required: true},
+  itemname: {type: String, required: true},
   description: {type: String, required: true},
   retail_cost: {type: Number, required: true},
   wholesale_cost: {type: Number, required: true},

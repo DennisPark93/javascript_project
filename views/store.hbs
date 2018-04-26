@@ -4,22 +4,36 @@
 <h3><b>{{store.storename}}</b></h4>
 <br>
 <br>
-<h5>
-Address: {{store.store_address}}, {{store.store_state}}, {{store.store_zipcode}}
+<h5 id="address">
+{{store.store_address}}, {{store.store_state}}, {{store.store_zipcode}}
+</h5>
 <br>
+
+{{#if message}}
+<div class="error">{{ message }}</div>
+{{/if}}
 
 <div id="map"></div>
     <script>
-      function initMap() {
-        var uluru = {lat: -25.363, lng: 131.044};
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 4,
-          center: uluru
-        });
-
-        var marker = new google.maps.Marker({
-          position: uluru,
-          map: map
+    function initMap() {
+        var geocoder = new google.maps.Geocoder();
+        var address = document.getElementById('address').innerHTML;
+        console.log(address);
+        geocoder.geocode( { 'address': address}, function(results, status) {
+          if (status == 'OK') {
+            var map = new google.maps.Map(document.getElementById('map'), {
+              zoom: 15,
+              center: results[0].geometry.location
+            });
+            var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location
+            });
+            google.maps.event.trigger(map, "resize")
+          }
+           else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
         });
       }
     </script>
@@ -27,19 +41,22 @@ Address: {{store.store_address}}, {{store.store_state}}, {{store.store_zipcode}}
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCyf3Hrk4e-1pUqIBsiYenAR8G-nd-bxY&callback=initMap">
 </script>
 
+<h5 id='financial'>
 Revenue: ${{store.revenue}}
 Cost: ${{store.cost}}
 Profit: ${{store.profit}}
 
 </h5>
-<table>
-	<thead>
+<table class="table table-hover">
+  <thead class="thead-light">
+    <tr>
 		<th>Item Name</th>
 		<th>Description</th>
 		<th>Retail Cost</th>
     <th>Wholesale Cost</th>
     <th>Stock Left</th>
     <th>Number Sold</th>
+    </tr>
 	</thead>
 	<tbody>
 		{{#if item}}
@@ -75,7 +92,7 @@ Profit: ${{store.profit}}
 		<input type="wholesale_cost" id="wholesale_cost" name="wholesale_cost" value="">
 	</div>
 	<div>
-		<label for="stock_left">Stock Leftt:</label>
+		<label for="stock_left">Stock Left:</label>
 		<input type="stock_left" id="stock_left" name="stock_left" value="">
 	</div>
 	<div>
@@ -83,7 +100,7 @@ Profit: ${{store.profit}}
 		<input type="num_sold" id="num_sold" name="num_sold" value="">
 	</div>
 	<input type="submit" name="additem" value="Add Item"> <input type="submit" name="updateitem" value="Update Item">
-	You must type same item name to update its information.
+  <input type="submit" name="removeitem" value="Remove Item">
 </form>
 
 
@@ -102,7 +119,12 @@ Profit: ${{store.profit}}
 		<input type="store_zipcode" id="store_zipcode" name="store_zipcode" value="">
 	</div>
 	<input type="submit" name="update" value="Update"> <input type="submit" name="remove" value="Remove Store from List">
+  <br>
+  <br>
+  You must type same item properties to update&delete its information.
+  <br>
+  All blanks must be filled!
 </form>
-<hr>
+
 
 </html>

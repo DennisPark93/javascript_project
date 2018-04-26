@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title> Checker </title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 	<link rel="stylesheet" href="/css/base.css" type="text/css" media="screen" title="no title" charset="utf-8">
 </head>
 <nav>
@@ -10,7 +11,7 @@
 		{{#if user}}
 		<li><b><a href="/"> Stores </a></b></li>
 		<li><b><a href="/user"> Account </a></b></li>
-		<li> Welcome to Checker! <a href="/user">{{user.username}}</a></li>
+		<li> Welcome to Checker! <a href="/user">{{user}}</a></li>
 		<li><b><a href="/logout"> logout </a></b></li>
 		{{else}}
 		<li><b><a href="/login"> Log-In </a></b></li>

@@ -3,9 +3,21 @@
 
 <h6 id='userinfo'>
 Username: {{thisuser.username}}<br>
+Email: {{thisuser.email}}<br>
 Revenue: ${{thisuser.revenue}}<br>
 Cost: ${{thisuser.cost}}<br>
 Profit: ${{thisuser.profit}}<br>
 
 </h4>
+
+
+
+<form method="POST" action="user">
+  Update e-mail to verify your account!
+	<div>
+		<label for="email">Email:</label>
+		<input type="text" name="email" value="">
+	</div>
+	<div class="submit"><input type="submit" value="Update Email"></div>
+</form>
 </html>

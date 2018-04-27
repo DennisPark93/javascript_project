@@ -34,6 +34,7 @@ app.use(flash());
 
 const initPassport = require('./passport/init');
 initPassport(passport);
+
 var isAuthenticated = function (req, res, next) {
 	if (req.isAuthenticated()){
     res.locals.user = req.user.username;
@@ -43,17 +44,6 @@ var isAuthenticated = function (req, res, next) {
 	res.redirect('/login');
 };
 
-// app.use(function (req, res, next) {
-//   res.locals.user = req.session.passport.user || null;
-//   next();
-// })
-//
-// app.use(function (req, res, next) {
-//     if (req.isAuthenticated()) {
-//       return next()
-//     }
-//     res.redirect('/login')
-// });
 
 
 app.get('/login', (req, res) => {
@@ -111,22 +101,18 @@ app.get('/', isAuthenticated, (req, res) => {
       else{
         res.redirect('/');
       }
-        // if(res.session.user._id == store.user){
+
 
     });
   }
 });
 
 
-//auth will be used untill we implement passport.js
 
 
 
 app.get('/user', isAuthenticated, (req, res) => {
-  // if(req.session.passport === null || req.session.passport === undefined){
-  //   res.redirect('/login');
-  // }
-  // else{
+
   Store.find({user: req.user._id}, function(err,store){
     if(store){
         let sr =[];
@@ -153,25 +139,23 @@ app.get('/user', isAuthenticated, (req, res) => {
     else{
       res.redirect('/');
     }
-      // if(res.session.user._id == store.user){
+
 
   });
 });
 
+app.post('/user', isAuthenticated, (req, res) => {
+  User.findOneAndUpdate({_id: req.user._id}, {$set: {email:req.body.email}}, {new: true}, function(err,user){
+    res.render('user', {thisuser: user});
+  });
+});
+
 app.get('/addstore', isAuthenticated, (req, res) => {
-  // if(req.session.passport === null || req.session.passport === undefined){
-  //   res.redirect('/login');
-  // }
-  // else{
     res.render('addstore');
-  // }
+
 });
 
 app.post('/addstore', isAuthenticated, (req, res) => {
-  // if(req.session.passport=== null || req.session.passport === undefined){
-  //   res.redirect('/login');
-  // }
-  // else{
     const newStore = new Store({
       user:req.user._id,
       storename: req.body.storename,
@@ -189,12 +173,11 @@ app.post('/addstore', isAuthenticated, (req, res) => {
         res.redirect('/');
       }
     });
-  // }
 });
 
 app.get('/store/:slug', isAuthenticated, (req, res) => {
   // if(res.locals.user){
-    Store.findOne({slug: req.params.slug}, function(err,store){
+    Store.findOne({slug: req.params.slug, user:req.user._id}, function(err,store){
 
       Item.find({store: store._id}, function(err,items){
         if(items){
@@ -208,7 +191,7 @@ app.get('/store/:slug', isAuthenticated, (req, res) => {
           const rsum = r.reduce(function(total, cur){return total + cur;},0);
           const csum = c.reduce(function(total, cur){return total + cur;},0);
           const psum = rsum - csum;
-          Store.findOneAndUpdate({slug: req.params.slug}, {$set: {revenue:rsum, cost:csum, profit:psum}}, {new: true}, function(err,store2){
+          Store.findOneAndUpdate({slug: req.params.slug, user:req.user._id}, {$set: {revenue:rsum, cost:csum, profit:psum}}, {new: true}, function(err,store2){
           res.render('store', {store: store2, item: items});
           });
           }
@@ -220,24 +203,17 @@ app.get('/store/:slug', isAuthenticated, (req, res) => {
         else{
           res.redirect('/');
         }
-      // if(res.session.user._id == store.user){
 
       });
-      // }
-      // else{
-      //    res.redirect('/');
-      // }
+
     });
-  // }
-  // else{
-  //   res.redirect('/');
-  // }
+
 });
 
 app.post('/store/:slug', isAuthenticated, (req, res) => {
   // if(res.locals.user){
     if(req.body.additem){
-      Store.findOne({slug: req.params.slug}, function(err,store){
+      Store.findOne({slug: req.params.slug, user: req.user._id}, function(err,store){
         const newItem = new Item({
           store: store._id,
           itemname: req.body.itemname,
@@ -264,7 +240,7 @@ app.post('/store/:slug', isAuthenticated, (req, res) => {
               const rsum = r.reduce((total, amount) => total + amount);
               const csum = c.reduce((total, amount) => total + amount);
               const psum = rsum - csum;
-              Store.findOneAndUpdate({slug: req.params.slug}, {$set: {revenue:rsum, cost:csum, profit:psum}}, {new: true}, function(err,store2){
+              Store.findOneAndUpdate({slug: req.params.slug, user:req.user._id}, {$set: {revenue:rsum, cost:csum, profit:psum}}, {new: true}, function(err,store2){
                 res.render('store', {store: store2, item: items});
               });
             });
@@ -273,39 +249,42 @@ app.post('/store/:slug', isAuthenticated, (req, res) => {
       });
     }
     else if(req.body.updateitem){
-      Store.findOne({slug: req.params.slug}, function(err,store){
-        Item.findOneAndUpdate({itemname: req.body.itemname}, {$set: {itemname: req.body.itemname, description: req.body.description, retail_cost: req.body.retail_cost, wholesale_cost: req.body.wholesale_cost, stock_left: req.body.stock_left, num_sold: req.body.num_sold}}, {new: true}, function(err,item){
-          let r =[];
-          let c = [];
-          items.forEach(function(ele){
-            r.push(ele.retail_cost*ele.num_sold);
-            c.push(ele.wholesale_cost*ele.num_sold);
-          });
-          const rsum = r.reduce(function(total, cur){return total + cur;},0);
-          const csum = c.reduce(function(total, cur){return total + cur;},0);
-          const psum = rsum - csum;
-          Store.findOneAndUpdate({slug: req.params.slug}, {$set: {revenue:rsum, cost:csum, profit:psum}}, {new: true}, function(err,store2){
-          res.render('store', {store: store2, item:item});
+      Store.findOne({slug: req.params.slug, user:req.user._id}, function(err,store){
+        Item.findOneAndUpdate({itemname: req.body.itemname, store:store._id}, {$set: {description: req.body.description, retail_cost: req.body.retail_cost, wholesale_cost: req.body.wholesale_cost, stock_left: req.body.stock_left, num_sold: req.body.num_sold}}, {new: true}, function(err,item2){
+          Item.find({store: store._id}, function(err,items){
+            let r =[];
+            let c = [];
+            items.forEach(function(ele){
+              r.push(ele.retail_cost*ele.num_sold);
+              c.push(ele.wholesale_cost*ele.num_sold);
+            });
+            const rsum = r.reduce(function(total, cur){return total + cur;},0);
+            const csum = c.reduce(function(total, cur){return total + cur;},0);
+            const psum = rsum - csum;
+            Store.findOneAndUpdate({slug: req.params.slug, user:req.user._id}, {$set: {revenue:rsum, cost:csum, profit:psum}}, {new: true}, function(err,store2){
+              res.render('store', {store: store2, item:items});
+        });
+
           });
         });
       });
     }
     else if(req.body.removeitem){
-      Store.findOne({slug: req.params.slug}, function(err,store){
-        Item.remove({store:store.id, itemname: req.body.itemname,description: req.body.description,retail_cost: req.body.retail_cost,wholesale_cost: req.body.wholesale_cost,stock_left: req.body.stock_left, num_sold: req.body.num_sold}, function(err,store){
+      Store.findOne({slug: req.params.slug, user:req.user._id}, function(err,store){
+        Item.remove({store:store._id, itemname: req.body.itemname,description: req.body.description,retail_cost: req.body.retail_cost,wholesale_cost: req.body.wholesale_cost,stock_left: req.body.stock_left, num_sold: req.body.num_sold}, function(err,store){
           res.redirect('/store/'+req.params.slug);
         });
       });
 
     }
     else if(req.body.remove){
-      Store.remove({slug: req.params.slug}, function(err,store){
+      Store.remove({slug: req.params.slug, user:req.user._id}, function(err,store){
         res.redirect('/');
       });
 
     }
     else if(req.body.update){
-      Store.findOneAndUpdate({slug: req.params.slug}, {$set: {store_address: req.body.store_address, store_state:req.body.store_state, store_zipcode:req.body.store_zipcode}}, {new: true}, function(err,store){
+      Store.findOneAndUpdate({slug: req.params.slug, user:req.user._id}, {$set: {store_address: req.body.store_address, store_state:req.body.store_state, store_zipcode:req.body.store_zipcode}}, {new: true}, function(err,store){
         Item.find({store: store._id}, function(err,items){
           if(items){
             let r =[];
@@ -318,7 +297,7 @@ app.post('/store/:slug', isAuthenticated, (req, res) => {
             const rsum = r.reduce(function(total, cur){return total + cur;},0);
             const csum = c.reduce(function(total, cur){return total + cur;},0);
             const psum = rsum - csum;
-            Store.findOneAndUpdate({slug: req.params.slug}, {$set: {revenue:rsum, cost:csum, profit:psum}}, {new: true}, function(err,store2){
+            Store.findOneAndUpdate({slug: req.params.slug,  user:req.user._id}, {$set: {revenue:rsum, cost:csum, profit:psum}}, {new: true}, function(err,store2){
             res.render('store', {store: store2, item: items});
             });
             }
@@ -333,28 +312,7 @@ app.post('/store/:slug', isAuthenticated, (req, res) => {
         });
       });
     }
-  // }
-  // else{
-  //   res.redirect('/');
-  // }
 });
 
-
-
-
-// passport.use(new LocalStrategy(//still implementing
-//   function(username, password, done) {
-//     User.findOne({ username: username }, function(err, user) {
-//       if (err) { return done(err); }
-//       if (!user) {
-//         return done(null, false, { message: 'Incorrect username.' });
-//       }
-//       if (!user.validPassword(password)) {
-//         return done(null, false, { message: 'Incorrect password.' });
-//       }
-//       return done(null, user);
-//     });
-//   }
-// ));
 
 app.listen(process.env.PORT || 3000);

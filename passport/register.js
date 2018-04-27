@@ -6,29 +6,24 @@ const flash = require('connect-flash');
 
 module.exports = function(passport){
 
-	passport.use('register', new LocalStrategy({
-            passReqToCallback : true
-        },
-        function(req, username, password, done) {
+	passport.use('register', new LocalStrategy({passReqToCallback : true}, function(req, username, password, done) {
 
-            findOrCreateUser = function(){
-                User.findOne({ 'username' :  username }, function(err, user) {
+            createuser = function(){
+                User.findOne({username: username}, function(err, user) {
 
                     if (err){
-                        console.log('Error in SignUp: '+err);
+                        console.log('Error in Register: '+ err);
                         return done(err);
                     }
 
                     if (user) {
-                        console.log('User already exists with username: '+username);
+                        console.log('User already exists with username: '+ username);
                         return done(null, false, req.flash('message','User Already Exists'));
                     } else {
 
                         const newUser = new User({
                           username: username,
-                          password: function(password){
-											        return bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
-											    }
+                          password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null)
                         });
                         newUser.save(function(err) {
                             if (err){
@@ -41,7 +36,7 @@ module.exports = function(passport){
                     }
                 });
             };
-            process.nextTick(findOrCreateUser);
+            process.nextTick(createuser);
         })
     );
 }

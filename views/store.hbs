@@ -61,7 +61,7 @@ Profit: ${{store.profit}}
 	<tbody>
 		{{#if item}}
 			{{#each item}}
-			<tr>
+			<tr onclick="content(this)">
 			<td>{{this.itemname}}</td>
 			<td>{{this.description}}</td>
 			<td>{{this.retail_cost}}</td>
@@ -73,6 +73,23 @@ Profit: ${{store.profit}}
 		{{/if}}
 	</tbody>
 </table>
+
+<script>
+  function content(ele){
+    let itemname = document.getElementById("itemname");
+    itemname.value = ele.childNodes[1].innerHTML;
+    let desc = document.getElementById("description");
+    desc.value = ele.childNodes[3].innerHTML;
+    let rc = document.getElementById("retail_cost");
+    rc.value = ele.childNodes[5].innerHTML;
+    let wc = document.getElementById("wholesale_cost");
+    wc.value = ele.childNodes[7].innerHTML;
+    let sl = document.getElementById("stock_left");
+    sl.value = ele.childNodes[9].innerHTML;
+    let ns = document.getElementById("num_sold");
+    ns.value = ele.childNodes[11].innerHTML;
+  }
+</script>
 
 <form method="POST" action="" class="additem">
 	<div>
@@ -121,9 +138,9 @@ Profit: ${{store.profit}}
 	<input type="submit" name="update" value="Update"> <input type="submit" name="remove" value="Remove Store from List">
   <br>
   <br>
-  You must type same item properties to update&delete its information.
+  Click the table row, then press update/remove button.
   <br>
-  All blanks must be filled!
+  All blanks must be filled!(Cannot update Item name)
 </form>
 
 

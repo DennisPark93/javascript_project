@@ -5,17 +5,12 @@ const bcrypt = require('bcryptjs');
 const flash = require('connect-flash');
 
 module.exports = function(passport){
-
 	const passwordmatch = function(user, password){
 			return bcrypt.compareSync(password, user.password);
 	}
 
-	passport.use('login', new LocalStrategy({
-            passReqToCallback : true
-        },
-        function(req, username, password, done) {
-            User.findOne({'username':  username },
-                function(err, user) {
+	passport.use('login', new LocalStrategy({passReqToCallback : true}, function(req, username, password, done) {
+            User.findOne({username:  username},function(err, user){
                     if (err)
                         return done(err);
                     if (!user){
@@ -24,7 +19,7 @@ module.exports = function(passport){
                     }
                     if (!passwordmatch(user, password)){
                         console.log('Invalid Password');
-                        return done(null, false, req.flash('message', 'Invalid Password')); // redirect back to login page
+                        return done(null, false, req.flash('message', 'Invalid Password'));
                     }
                     return done(null, user);
                 }

@@ -42,14 +42,13 @@ nav < ul {
   top: 130px;
 }
 .store{
-  display: inline;
-  list-style-type: none;
+  /* display: inline;
+
   margin: 0;
-  padding: 0px;
+  padding: 0px; */
   text-align: center;
-  float: left;
-  width: 50%;
-  text-align: center;
+  list-style-type: none;
+
 }
 
 table{

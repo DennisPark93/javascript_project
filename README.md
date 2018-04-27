@@ -1,6 +1,6 @@
 
 
-# Checker(Trying to come up with new name)
+# Checker
 
 ## Overview
 

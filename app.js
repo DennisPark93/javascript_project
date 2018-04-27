@@ -35,6 +35,13 @@ app.use(flash());
 const initPassport = require('./passport/init');
 initPassport(passport);
 
+function format(num){
+    let n = num.toString(), p = n.indexOf('.');
+    return n.replace(/\d(?=(?:\d{3})+(?:\.|$))/g, function($0, i){
+        return p<0 || i<p ? ($0+',') : $0;
+    });
+}
+
 var isAuthenticated = function (req, res, next) {
 	if (req.isAuthenticated()){
     res.locals.user = req.user.username;
@@ -90,7 +97,11 @@ app.get('/', isAuthenticated, (req, res) => {
           const rsum = sr.reduce(function(total, cur){return total + cur;},0);
           const csum = sc.reduce(function(total, cur){return total + cur;},0);
           const psum = sp.reduce(function(total, cur){return total + cur;},0);
-          User.findOneAndUpdate({_id: req.user._id}, {$set: {revenue:rsum, cost:csum, profit:psum}}, {new: true}, function(err,user){
+          const srsum = format(rsum);
+          const scsum = format(csum);
+          const spsum = format(psum);
+
+          User.findOneAndUpdate({_id: req.user._id}, {$set: {revenue:rsum, cost:csum, profit:psum, srevenue:srsum, scost: scsum, sprofit: spsum}}, {new: true}, function(err,user){
             res.render('index', {store: store});
           });
       }
@@ -126,7 +137,11 @@ app.get('/user', isAuthenticated, (req, res) => {
         const rsum = sr.reduce(function(total, cur){return total + cur;},0);
         const csum = sc.reduce(function(total, cur){return total + cur;},0);
         const psum = sp.reduce(function(total, cur){return total + cur;},0);
-        User.findOneAndUpdate({_id: req.user._id}, {$set: {revenue:rsum, cost:csum, profit:psum}}, {new: true}, function(err,user){
+        const srsum = format(rsum);
+        const scsum = format(csum);
+        const spsum = format(psum);
+
+        User.findOneAndUpdate({_id: req.user._id}, {$set: {revenue:rsum, cost:csum, profit:psum, srevenue:srsum, scost: scsum, sprofit: spsum}}, {new: true}, function(err,user){
           res.render('user', {thisuser: user});
         });
     }

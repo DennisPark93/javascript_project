@@ -9,8 +9,11 @@ const User = new mongoose.Schema({
   email: {type: String, default: ""},
   password: {type: String, unique: true, required: true},
   revenue: {type: Number, default: 0},
+  srevenue: {type: String, default: ""},
   cost: {type: Number, default: 0},
-  profit: {type: Number, default: 0}
+  scost: {type: String, default: ""},
+  profit: {type: Number, default: 0},
+  sprofit: {type: String, default: ""}
 }, {
   _id: true
 });
